@@ -4,7 +4,6 @@ CREATE TABLE "contact" (
                            "last_name" varchar,
                            "address" varchar,
                            "phone_number" varchar,
-                           "created_at" timestamp,
                            "contact_type" integer,
                            "user_id" integer
 );
@@ -15,8 +14,7 @@ CREATE TABLE "user" (
                         "last_name" varchar,
                         "email" varchar,
                         "password" varchar,
-                        "role" varchar,
-                        "created_at" timestamp
+                        "role" varchar
 );
 
 CREATE TABLE "contact_type" (
