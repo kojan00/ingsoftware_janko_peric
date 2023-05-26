@@ -1,5 +1,5 @@
 CREATE TABLE "contact" (
-                           "id" integer PRIMARY KEY,
+                           "id" serial PRIMARY KEY,
                            "first_name" varchar,
                            "last_name" varchar,
                            "address" varchar,
@@ -9,7 +9,7 @@ CREATE TABLE "contact" (
 );
 
 CREATE TABLE "user" (
-                        "id" integer PRIMARY KEY,
+                        "id" serial PRIMARY KEY,
                         "first_name" varchar,
                         "last_name" varchar,
                         "email" varchar,
@@ -18,7 +18,7 @@ CREATE TABLE "user" (
 );
 
 CREATE TABLE "contact_type" (
-                                "id" integer PRIMARY KEY,
+                                "id" serial PRIMARY KEY,
                                 "type" varchar
 );
 

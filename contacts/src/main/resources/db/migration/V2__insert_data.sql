@@ -1,15 +1,15 @@
-INSERT INTO "contact_type" ("id", "type")
+INSERT INTO "contact_type" ("type")
 VALUES
-    (1, 'Personal'),
-    (2, 'Work');
+    ('Personal'),
+    ('Work');
 
-INSERT INTO "user" ("id", "first_name", "last_name", "email", "password", "role")
+INSERT INTO "user" ("first_name", "last_name", "email", "password", "role")
 VALUES
-    (1, 'John', 'Doe', 'john@example.com', 'password123', 'admin'),
-    (2, 'Robert', 'Johnson', 'robert@example.com', 'password456', 'user');
+    ('John', 'Doe', 'john@example.com', 'password123', 'admin'),
+    ('Robert', 'Johnson', 'robert@example.com', 'password456', 'user');
 
-INSERT INTO "contact" ("id", "first_name", "last_name", "address", "phone_number", "contact_type", "user_id")
+INSERT INTO "contact" ("first_name", "last_name", "address", "phone_number", "contact_type", "user_id")
 VALUES
-    (1, 'John', 'Doe', '123 Main St', '555-1234', 1, 1),
-    (2, 'Jane', 'Smith', '456 Elm St', '555-5678', 2, 1),
-    (3, 'Robert', 'Johnson', '789 Oak St', '555-9012', 1, 2);
+    ('John', 'Doe', '123 Main St', '555-1234', 1, 1),
+    ('Jane', 'Smith', '456 Elm St', '555-5678', 2, 1),
+    ('Robert', 'Johnson', '789 Oak St', '555-9012', 1, 2);
