@@ -73,11 +73,11 @@ public class ContactDTO {
     this.contactType = contactType;
   }
 
-  public UserDTO getUserDTO() {
+  public UserDTO getUser() {
     return user;
   }
 
-  public void setUserDTO(UserDTO user) {
+  public void setUser(UserDTO user) {
     this.user = user;
   }
 }
