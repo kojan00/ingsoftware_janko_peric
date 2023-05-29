@@ -1,6 +1,6 @@
 package com.ingsoftware.contacts.models.dtos;
 
-public class UserDTO {
+public class UserResponseDTO {
   private String firstName;
 
   private String lastName;
@@ -9,9 +9,9 @@ public class UserDTO {
 
   private String role;
 
-  public UserDTO() {}
+  public UserResponseDTO() {}
 
-  public UserDTO(String firstName, String lastName, String email, String role) {
+  public UserResponseDTO(String firstName, String lastName, String email, String role) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;

@@ -14,7 +14,7 @@ public class ContactDTO {
 
   private ContactType contactType;
 
-  private UserDTO user;
+  private UserResponseDTO user;
 
   public ContactDTO() {}
 
@@ -24,7 +24,7 @@ public class ContactDTO {
       String address,
       String phoneNumber,
       ContactType contactType,
-      UserDTO user) {
+      UserResponseDTO user) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.address = address;
@@ -73,11 +73,11 @@ public class ContactDTO {
     this.contactType = contactType;
   }
 
-  public UserDTO getUser() {
+  public UserResponseDTO getUser() {
     return user;
   }
 
-  public void setUser(UserDTO user) {
+  public void setUser(UserResponseDTO user) {
     this.user = user;
   }
 }

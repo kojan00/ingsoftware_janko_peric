@@ -28,10 +28,12 @@ public class Contact {
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   @JoinColumn(name = "contact_type")
+  @NotNull
   private ContactType contactType;
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   @JoinColumn(name = "user_id")
+  @NotNull
   private User user;
 
   public Contact() {}

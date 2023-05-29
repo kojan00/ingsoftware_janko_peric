@@ -1,6 +1,7 @@
 package com.ingsoftware.contacts.controllers;
 
-import com.ingsoftware.contacts.models.dtos.UserDTO;
+import com.ingsoftware.contacts.models.dtos.UserResponseDTO;
+import com.ingsoftware.contacts.models.dtos.UserRegistrationDTO;
 import com.ingsoftware.contacts.models.entities.User;
 import com.ingsoftware.contacts.services.interfaces.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -18,23 +19,23 @@ public class UserController {
   }
 
   @GetMapping("/users")
-  public List<UserDTO> findAll() {
+  public List<UserResponseDTO> findAll() {
     return userService.findAll();
   }
 
   @GetMapping("/users/{id}")
-  public UserDTO findById(@PathVariable int id) {
+  public UserResponseDTO findById(@PathVariable int id) {
     return userService.findById(id);
   }
 
   @PostMapping("/users")
-  public User addUser(@RequestBody User user) {
-    return userService.save(user);
+  public User addUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
+    return userService.save(userRegistrationDTO);
   }
 
   @PutMapping("/users")
-  public User editUser(@RequestBody User user) {
-    return userService.save(user);
+  public User editUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
+    return userService.save(userRegistrationDTO);
   }
 
   @DeleteMapping("/users/{id}")
