@@ -8,8 +8,7 @@ import jakarta.validation.constraints.NotNull;
 public class ContactType {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   @Column(name = "type")
   @NotNull
@@ -17,11 +16,11 @@ public class ContactType {
 
   public ContactType() {}
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

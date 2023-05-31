@@ -8,11 +8,11 @@ import java.util.List;
 public interface ContactService {
   List<ContactDTO> findAll();
 
-  List<ContactDTO> findAllByUser(int id);
+  List<ContactDTO> findAllByUser(long id);
 
-  ContactDTO findById(int id);
+  ContactDTO findById(long id);
 
-  Contact addContact(Contact contact, int idUser);
+  Contact addContact(ContactDTO contactDTO, long idUser);
 
-  String deleteById(int id);
+  String deleteById(long id);
 }

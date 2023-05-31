@@ -24,7 +24,7 @@ public class UserController {
   }
 
   @GetMapping("/users/{id}")
-  public UserResponseDTO findById(@PathVariable int id) {
+  public UserResponseDTO findById(@PathVariable long id) {
     return userService.findById(id);
   }
 
@@ -39,7 +39,7 @@ public class UserController {
   }
 
   @DeleteMapping("/users/{id}")
-  public String deleteById(@PathVariable int id) {
+  public String deleteById(@PathVariable long id) {
     return userService.deleteById(id);
   }
 }

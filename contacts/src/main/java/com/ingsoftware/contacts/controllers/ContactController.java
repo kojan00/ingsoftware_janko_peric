@@ -23,27 +23,27 @@ public class ContactController {
   }
 
   @GetMapping("/users/{idUser}/contacts/all")
-  public List<ContactDTO> findAllByUser(@PathVariable int idUser) {
+  public List<ContactDTO> findAllByUser(@PathVariable long idUser) {
     return contactService.findAllByUser(idUser);
   }
 
   @GetMapping("/contacts/{idContact}")
-  public ContactDTO findById(@PathVariable int idContact) {
+  public ContactDTO findById(@PathVariable long idContact) {
     return contactService.findById(idContact);
   }
 
   @PostMapping("/users/{idUser}/contacts")
-  public Contact addContact(@RequestBody Contact contact, @PathVariable int idUser) {
-    return contactService.addContact(contact, idUser);
+  public Contact addContact(@RequestBody ContactDTO contactDTO, @PathVariable long idUser) {
+    return contactService.addContact(contactDTO, idUser);
   }
 
   @PutMapping("/users/{idUser}/contacts")
-  public Contact editContact(@RequestBody Contact contact, @PathVariable int idUser) {
-    return contactService.addContact(contact, idUser);
+  public Contact editContact(@RequestBody ContactDTO contactDTO, @PathVariable long idUser) {
+    return contactService.addContact(contactDTO, idUser);
   }
 
   @DeleteMapping("/users/contacts/{idContact}")
-  public String deleteById(@PathVariable int idContact) {
+  public String deleteById(@PathVariable long idContact) {
     return contactService.deleteById(idContact);
   }
 }

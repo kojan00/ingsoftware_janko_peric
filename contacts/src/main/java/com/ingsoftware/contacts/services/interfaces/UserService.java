@@ -10,9 +10,9 @@ public interface UserService {
 
   List<UserResponseDTO> findAll();
 
-  UserResponseDTO findById(int id);
+  UserResponseDTO findById(long id);
 
   User save(UserRegistrationDTO userRegistrationDTO);
 
-  String deleteById(int id);
+  String deleteById(long id);
 }
