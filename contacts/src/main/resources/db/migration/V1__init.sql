@@ -1,26 +1,24 @@
 CREATE TABLE "contact" (
-                           "id" integer PRIMARY KEY,
+                           "id" serial PRIMARY KEY,
                            "first_name" varchar,
                            "last_name" varchar,
                            "address" varchar,
                            "phone_number" varchar,
-                           "created_at" timestamp,
                            "contact_type" integer,
                            "user_id" integer
 );
 
 CREATE TABLE "user" (
-                        "id" integer PRIMARY KEY,
+                        "id" serial PRIMARY KEY,
                         "first_name" varchar,
                         "last_name" varchar,
                         "email" varchar,
                         "password" varchar,
-                        "role" varchar,
-                        "created_at" timestamp
+                        "role" varchar
 );
 
 CREATE TABLE "contact_type" (
-                                "id" integer PRIMARY KEY,
+                                "id" serial PRIMARY KEY,
                                 "type" varchar
 );
 
