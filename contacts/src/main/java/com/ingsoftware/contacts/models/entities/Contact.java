@@ -1,48 +1,53 @@
 package com.ingsoftware.contacts.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "contact")
+@Table(name = "contacts")
 public class Contact {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   @Column(name = "first_name")
+  @Size(min = 1, max = 25)
   @NotNull
   private String firstName;
 
   @Column(name = "last_name")
+  @Size(min = 1, max = 25)
   @NotNull
   private String lastName;
 
   @Column(name = "address")
+  @Size(min = 1, max = 40)
   private String address;
 
   @Column(name = "phone_number")
+  @Size(min = 1, max = 15)
   @NotNull
   private String phoneNumber;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH })
   @JoinColumn(name = "contact_type")
   @NotNull
   private ContactType contactType;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   @NotNull
   private User user;
 
   public Contact() {}
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

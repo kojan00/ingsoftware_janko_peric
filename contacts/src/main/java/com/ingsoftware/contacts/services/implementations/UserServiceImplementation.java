@@ -7,6 +7,7 @@ import com.ingsoftware.contacts.repositories.UserRepository;
 import com.ingsoftware.contacts.services.interfaces.UserService;
 import com.ingsoftware.contacts.services.mappers.UserMapper;
 import com.ingsoftware.contacts.services.mappers.UserRegistrationMapper;
+import io.hypersistence.tsid.TSID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,7 +38,7 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
-  public UserResponseDTO findById(int id) {
+  public UserResponseDTO findById(long id) {
     User user = userRepository
             .findById(id)
             .orElseThrow(
@@ -49,11 +50,13 @@ public class UserServiceImplementation implements UserService {
   @Override
   public User save(UserRegistrationDTO userRegistrationDTO) {
     User user = userRegistrationMapper.toEntity(userRegistrationDTO);
+    TSID tsid = TSID.fast();
+    user.setId(tsid.toLong());
     return userRepository.save(user);
   }
 
   @Override
-  public String deleteById(int id) {
+  public String deleteById(long id) {
     findById(id);
     userRepository.deleteById(id);
     return "User has been deleted successfully!";

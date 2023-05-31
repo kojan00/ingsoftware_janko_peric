@@ -1,50 +1,59 @@
 package com.ingsoftware.contacts.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.Type;
+
+
 
 import java.util.List;
 
 @Entity
-@Table(name = "user", schema = "public")
+@Table(name = "users", schema = "public")
 public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   @Column(name = "first_name")
+  @Size(min = 1, max = 25)
   @NotNull
   private String firstName;
 
   @Column(name = "last_name")
+  @Size(min = 1, max = 25)
   @NotNull
   private String lastName;
 
   @Column(name = "email")
+  @Size(min = 1, max = 25)
   @NotNull
   private String email;
 
   @Column(name = "password")
+  @Size(min = 1, max = 25)
   @NotNull
   private String password;
 
-  @Column(name = "role")
+  @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "role")
+  @Type(PostgreSQLEnumType.class)
   @NotNull
-  private String role;
+  private Role role;
 
-  @JsonIgnore
+
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Contact> contacts;
 
   public User() {}
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -80,11 +89,11 @@ public class User {
     this.password = password;
   }
 
-  public String getRole() {
+  public Role getRole() {
     return role;
   }
 
-  public void setRole(String role) {
+  public void setRole(Role role) {
     this.role = role;
   }
 
