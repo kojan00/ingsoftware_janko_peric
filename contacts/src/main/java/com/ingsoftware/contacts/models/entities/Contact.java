@@ -2,6 +2,7 @@ package com.ingsoftware.contacts.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -9,31 +10,34 @@ import jakarta.validation.constraints.Size;
 @Table(name = "contacts")
 public class Contact {
 
-  @Id
-  private Long id;
+  @Id private Long id;
 
   @Column(name = "first_name")
-  @Size(min = 1, max = 25)
+  @Size(max = 25)
   @NotNull
+  @NotBlank(message = "Name is mandatory.")
   private String firstName;
 
   @Column(name = "last_name")
-  @Size(min = 1, max = 25)
+  @Size(max = 25)
   @NotNull
+  @NotBlank(message = "Surname is mandatory.")
   private String lastName;
 
   @Column(name = "address")
-  @Size(min = 1, max = 40)
+  @Size(max = 40)
   private String address;
 
   @Column(name = "phone_number")
-  @Size(min = 1, max = 15)
+  @Size(max = 15)
   @NotNull
+  @NotBlank(message = "Phone number is mandatory.")
   private String phoneNumber;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH })
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "contact_type")
   @NotNull
+  @NotBlank(message = "Contact type is mandatory.")
   private ContactType contactType;
 
   @ManyToOne(fetch = FetchType.LAZY)

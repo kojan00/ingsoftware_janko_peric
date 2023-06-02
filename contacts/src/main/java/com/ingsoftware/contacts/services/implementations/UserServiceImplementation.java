@@ -1,5 +1,6 @@
 package com.ingsoftware.contacts.services.implementations;
 
+import com.ingsoftware.contacts.exceptions.UserNotFoundException;
 import com.ingsoftware.contacts.models.dtos.UserResponseDTO;
 import com.ingsoftware.contacts.models.dtos.UserRegistrationDTO;
 import com.ingsoftware.contacts.models.entities.User;
@@ -8,6 +9,10 @@ import com.ingsoftware.contacts.services.interfaces.UserService;
 import com.ingsoftware.contacts.services.mappers.UserMapper;
 import com.ingsoftware.contacts.services.mappers.UserRegistrationMapper;
 import io.hypersistence.tsid.TSID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,7 +29,10 @@ public class UserServiceImplementation implements UserService {
 
   private final UserRegistrationMapper userRegistrationMapper;
 
-  public UserServiceImplementation(UserRepository userRepository, UserMapper userMapper, UserRegistrationMapper userRegistrationMapper) {
+  public UserServiceImplementation(
+      UserRepository userRepository,
+      UserMapper userMapper,
+      UserRegistrationMapper userRegistrationMapper) {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
     this.userRegistrationMapper = userRegistrationMapper;
@@ -38,12 +46,18 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
+  public List<UserResponseDTO> findAllPaginated(Pageable pageable) {
+    List<User> users = userRepository.findAll(pageable).toList();
+    List<UserResponseDTO> userResponseDTOS = userMapper.toDtoList(users);
+
+    return userResponseDTOS;
+  }
+
+  @Override
   public UserResponseDTO findById(long id) {
-    User user = userRepository
-            .findById(id)
-            .orElseThrow(
-                    () -> new ResponseStatusException(NOT_FOUND, "Specified resource has not been found."));
+    User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
     UserResponseDTO userResponseDTO = userMapper.toDto(user);
+
     return userResponseDTO;
   }
 
