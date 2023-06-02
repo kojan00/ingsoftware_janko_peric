@@ -3,6 +3,10 @@ package com.ingsoftware.contacts.controllers;
 import com.ingsoftware.contacts.models.dtos.ContactDTO;
 import com.ingsoftware.contacts.models.entities.Contact;
 import com.ingsoftware.contacts.services.interfaces.ContactService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +26,14 @@ public class ContactController {
     return contactService.findAll();
   }
 
-  @GetMapping("/users/{idUser}/contacts/all")
+  @GetMapping("/users/contacts/paginated/page={page}/size={size}")
+  public List<ContactDTO> findAllPaginated(
+      Pageable pageable, @PathVariable int page, @PathVariable int size) {
+    pageable = PageRequest.of(page, size);
+    return contactService.findAll(pageable);
+  }
+
+  @GetMapping("/users/{idUser}/contacts")
   public List<ContactDTO> findAllByUser(@PathVariable long idUser) {
     return contactService.findAllByUser(idUser);
   }
@@ -33,7 +44,7 @@ public class ContactController {
   }
 
   @PostMapping("/users/{idUser}/contacts")
-  public Contact addContact(@RequestBody ContactDTO contactDTO, @PathVariable long idUser) {
+  public Contact addContact(@RequestBody @Valid ContactDTO contactDTO, @PathVariable long idUser) {
     return contactService.addContact(contactDTO, idUser);
   }
 

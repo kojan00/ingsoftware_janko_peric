@@ -2,11 +2,10 @@ package com.ingsoftware.contacts.models.entities;
 
 import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.Type;
-
-
 
 import java.util.List;
 
@@ -14,27 +13,30 @@ import java.util.List;
 @Table(name = "users", schema = "public")
 public class User {
 
-  @Id
-  private Long id;
+  @Id private Long id;
 
   @Column(name = "first_name")
-  @Size(min = 1, max = 25)
+  @Size(max = 25)
   @NotNull
+  @NotBlank(message = "Name is mandatory.")
   private String firstName;
 
   @Column(name = "last_name")
-  @Size(min = 1, max = 25)
+  @Size(max = 25)
   @NotNull
+  @NotBlank(message = "Surname is mandatory.")
   private String lastName;
 
   @Column(name = "email")
-  @Size(min = 1, max = 25)
+  @Size(max = 25)
   @NotNull
+  @NotBlank(message = "Email is mandatory.")
   private String email;
 
   @Column(name = "password")
-  @Size(min = 1, max = 25)
+  @Size(max = 25)
   @NotNull
+  @NotBlank(message = "Password is mandatory.")
   private String password;
 
   @Enumerated(EnumType.STRING)
@@ -42,7 +44,6 @@ public class User {
   @Type(PostgreSQLEnumType.class)
   @NotNull
   private Role role;
-
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Contact> contacts;
