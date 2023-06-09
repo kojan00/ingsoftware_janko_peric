@@ -5,13 +5,20 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import org.hibernate.annotations.Type;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+@Builder
 @Entity
 @Table(name = "users", schema = "public")
-public class User {
+public class User implements UserDetails, GrantedAuthority {
 
   @Id private Long id;
 
@@ -34,7 +41,7 @@ public class User {
   private String email;
 
   @Column(name = "password")
-  @Size(max = 25)
+  @Size(max = 100)
   @NotNull
   @NotBlank(message = "Password is mandatory.")
   private String password;
@@ -104,5 +111,42 @@ public class User {
 
   public void setContacts(List<Contact> contacts) {
     this.contacts = contacts;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    List<GrantedAuthority> list = new ArrayList<>();
+    list.add(new SimpleGrantedAuthority("ROLE_" + this.role));
+    return list;
+  }
+
+  @Override
+  public String getUsername() {
+    return this.email;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
+
+  @Override
+  public String getAuthority() {
+    return role.toString();
   }
 }
