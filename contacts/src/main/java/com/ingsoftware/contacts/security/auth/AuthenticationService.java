@@ -1,11 +1,8 @@
 package com.ingsoftware.contacts.security.auth;
 
 import com.ingsoftware.contacts.models.dtos.LoginRequestDTO;
-import com.ingsoftware.contacts.models.dtos.UserRegistrationDTO;
-import com.ingsoftware.contacts.models.entities.User;
 import com.ingsoftware.contacts.repositories.UserRepository;
 import com.ingsoftware.contacts.services.mappers.UserRegistrationMapper;
-import io.hypersistence.tsid.TSID;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -42,15 +39,6 @@ public class AuthenticationService {
     this.passwordEncoder = passwordEncoder;
     this.userMapper = userMapper;
     this.authenticationManager = authenticationManager;
-  }
-
-  public User registerUser(UserRegistrationDTO userDTO) {
-    String encodedPassword = passwordEncoder.encode(userDTO.password());
-    User user = userMapper.toEntity(userDTO);
-    user.setPassword(encodedPassword);
-    TSID tsid = TSID.fast();
-    user.setId(tsid.toLong());
-    return userRepository.save(user);
   }
 
   public ResponseEntity loginUser(HttpServletRequest request, LoginRequestDTO loginRequestDTO) {

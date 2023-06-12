@@ -9,16 +9,11 @@ import com.ingsoftware.contacts.services.interfaces.UserService;
 import com.ingsoftware.contacts.services.mappers.UserMapper;
 import com.ingsoftware.contacts.services.mappers.UserRegistrationMapper;
 import io.hypersistence.tsid.TSID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class UserServiceImplementation implements UserService {
@@ -29,13 +24,17 @@ public class UserServiceImplementation implements UserService {
 
   private final UserRegistrationMapper userRegistrationMapper;
 
+  private final PasswordEncoder passwordEncoder;
+
   public UserServiceImplementation(
       UserRepository userRepository,
       UserMapper userMapper,
-      UserRegistrationMapper userRegistrationMapper) {
+      UserRegistrationMapper userRegistrationMapper,
+      PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
     this.userRegistrationMapper = userRegistrationMapper;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override
@@ -64,8 +63,12 @@ public class UserServiceImplementation implements UserService {
   @Override
   public User save(UserRegistrationDTO userRegistrationDTO) {
     User user = userRegistrationMapper.toEntity(userRegistrationDTO);
+
     TSID tsid = TSID.fast();
     user.setId(tsid.toLong());
+
+    String encodedPassword = passwordEncoder.encode(userRegistrationDTO.password());
+    user.setPassword(encodedPassword);
     return userRepository.save(user);
   }
 
