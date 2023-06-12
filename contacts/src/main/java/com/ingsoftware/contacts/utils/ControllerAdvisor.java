@@ -4,17 +4,15 @@ import com.ingsoftware.contacts.exceptions.ContactNotFoundException;
 import com.ingsoftware.contacts.exceptions.ContactTypeNotFoundException;
 import com.ingsoftware.contacts.exceptions.NoDataFoundException;
 import com.ingsoftware.contacts.exceptions.UserNotFoundException;
-import jakarta.validation.ConstraintViolation;
+
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -75,13 +73,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
       ConstraintViolationException ex, WebRequest request) {
     Map<String, Object> body = new LinkedHashMap<>();
     body.put("timestamp", LocalDateTime.now());
-    body.put("message", "Mandatory field has not been filled.");
+    body.put("message", "Your input is not valid.");
 
     ex.printStackTrace();
     return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
-  // MISLIM DA OVAJ METOD NE HVATA LEPO IZ NEKOG RAZLOGA PA SAM ODRADIO ContstraintViolationException IZNAD
+  // MISLIM DA OVAJ METOD NE HVATA LEPO IZ NEKOG RAZLOGA PA SAM ODRADIO
+  // ContstraintViolationException IZNAD
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
       MethodArgumentNotValidException ex,
