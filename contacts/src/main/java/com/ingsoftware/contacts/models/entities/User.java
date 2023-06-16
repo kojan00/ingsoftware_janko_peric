@@ -20,11 +20,16 @@ import java.util.List;
 @Table(name = "users", schema = "public")
 public class User implements UserDetails, GrantedAuthority {
 
-  @Id private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+
+  @Column(name = "tsid")
+  @NotNull
+  private Long tsid;
 
   @Column(name = "first_name")
   @Size(max = 25)
-  @NotNull
   @NotBlank(message = "Name is mandatory.")
   private String firstName;
 
@@ -57,12 +62,20 @@ public class User implements UserDetails, GrantedAuthority {
 
   public User() {}
 
-  public Long getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(int id) {
     this.id = id;
+  }
+
+  public Long getTsid() {
+    return tsid;
+  }
+
+  public void setTsid(Long tsid) {
+    this.tsid = tsid;
   }
 
   public String getFirstName() {

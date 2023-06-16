@@ -1,6 +1,5 @@
 package com.ingsoftware.contacts.security;
 
-import com.ingsoftware.contacts.models.entities.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,7 +7,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,9 +35,10 @@ public class WebSecurityConfig {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
             auth -> {
-              auth.requestMatchers("/auth/**").permitAll();
+              auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/auth/**").permitAll();
               auth.requestMatchers("/user-management/**").hasRole("ADMIN");
-              auth.requestMatchers("/contact-management/**").hasAnyRole("ADMIN", "USER");
+              auth.requestMatchers("/contact-types/**").hasRole("ADMIN");
+              auth.requestMatchers("/contact-management/**").hasRole("USER");
               auth.anyRequest().authenticated();
             });
 

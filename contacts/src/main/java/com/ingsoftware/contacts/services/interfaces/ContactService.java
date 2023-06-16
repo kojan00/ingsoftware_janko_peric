@@ -1,6 +1,7 @@
 package com.ingsoftware.contacts.services.interfaces;
 
-import com.ingsoftware.contacts.models.dtos.ContactDTO;
+import com.ingsoftware.contacts.models.dtos.ContactRequestDTO;
+import com.ingsoftware.contacts.models.dtos.ContactResponseDTO;
 import com.ingsoftware.contacts.models.entities.Contact;
 import org.springframework.data.domain.Pageable;
 
@@ -8,21 +9,19 @@ import java.util.List;
 
 public interface ContactService {
 
-  List<ContactDTO> findAll(Pageable pageable);
+  List<ContactResponseDTO> findAll(Pageable pageable);
 
-  List<ContactDTO> findAllByUser(long id);
+  List<ContactResponseDTO> findAllByUser(long tsid);
 
-  List<ContactDTO> findAllByAddressKeyword(long id, String keyword);
+  List<ContactResponseDTO> findAllByAddressKeyword(long tsid, String keyword);
 
-  List<ContactDTO> findAllByFirstNameKeyword(long id, String keyword);
+  List<ContactResponseDTO> findAllByFirstNameKeyword(long tsid, String keyword);
 
-  List<ContactDTO> findAllByLastNameKeyword(long id, String keyword);
+  List<ContactResponseDTO> findAllByLastNameKeyword(long tsid, String keyword);
 
-  List<ContactDTO> findAllByPhoneNumberKeyword(long id, String keyword);
+  List<ContactResponseDTO> findAllByPhoneNumberKeyword(long tsid, String keyword);
 
-  ContactDTO findById(long id);
+  Contact save(ContactRequestDTO contactRequestDTO);
 
-  Contact addContact(ContactDTO contactDTO, long idUser);
-
-  String deleteById(long id);
+  String deleteByTsid(long tsid);
 }
