@@ -1,6 +1,5 @@
 package com.ingsoftware.contacts.services.mappers;
 
-
 import com.ingsoftware.contacts.models.dtos.UserResponseDTO;
 import com.ingsoftware.contacts.models.entities.User;
 import org.mapstruct.Mapper;

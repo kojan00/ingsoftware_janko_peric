@@ -1,26 +1,29 @@
 CREATE TYPE role AS ENUM ('USER', 'ADMIN');
 CREATE TABLE contacts (
-                           id bigint PRIMARY KEY,
-                           first_name varchar NOT NULL,
-                           last_name varchar NOT NULL,
-                           address varchar,
-                           phone_number varchar NOT NULL,
+                           id serial PRIMARY KEY,
+                           tsid bigint unique,
+                           first_name varchar(25) NOT NULL,
+                           last_name varchar(25) NOT NULL,
+                           address varchar(40),
+                           phone_number varchar(15) NOT NULL,
                            contact_type bigint NOT NULL,
                            user_id bigint NOT NULL
 );
 
 CREATE TABLE users (
-                        id bigint PRIMARY KEY,
-                        first_name varchar NOT NULL,
-                        last_name varchar NOT NULL,
-                        email varchar NOT NULL,
-                        password varchar NOT NULL,
+                        id serial PRIMARY KEY,
+                        tsid bigint unique,
+                        first_name varchar(25) NOT NULL,
+                        last_name varchar(25) NOT NULL,
+                        email varchar(25) NOT NULL,
+                        password varchar(100) NOT NULL,
                         role role NOT NULL
 );
 
 CREATE TABLE contact_type (
-                                id bigint PRIMARY KEY,
-                                type varchar
+                                id serial PRIMARY KEY,
+                                tsid bigint unique,
+                                type varchar(25)
 );
 
 ALTER TABLE contacts ADD FOREIGN KEY (contact_type) REFERENCES contact_type (id);

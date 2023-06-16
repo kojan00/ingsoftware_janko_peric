@@ -9,6 +9,7 @@ import com.ingsoftware.contacts.services.interfaces.UserService;
 import com.ingsoftware.contacts.services.mappers.UserMapper;
 import com.ingsoftware.contacts.services.mappers.UserRegistrationMapper;
 import io.hypersistence.tsid.TSID;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,12 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
-  public UserResponseDTO findById(long id) {
-    User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+  public UserResponseDTO findByTsid(long tsid) {
+    User user = userRepository.findByTsid(tsid);
+
+    if (user == null) {
+      throw new UserNotFoundException();
+    }
     UserResponseDTO userResponseDTO = userMapper.toDto(user);
 
     return userResponseDTO;
@@ -65,7 +70,7 @@ public class UserServiceImplementation implements UserService {
     User user = userRegistrationMapper.toEntity(userRegistrationDTO);
 
     TSID tsid = TSID.fast();
-    user.setId(tsid.toLong());
+    user.setTsid(tsid.toLong());
 
     String encodedPassword = passwordEncoder.encode(userRegistrationDTO.password());
     user.setPassword(encodedPassword);
@@ -73,9 +78,10 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
-  public String deleteById(long id) {
-    findById(id);
-    userRepository.deleteById(id);
+  @Transactional
+  public String deleteByTsid(long tsid) {
+    System.out.println("found");
+    userRepository.deleteByTsid(tsid);
     return "User has been deleted successfully!";
   }
 }

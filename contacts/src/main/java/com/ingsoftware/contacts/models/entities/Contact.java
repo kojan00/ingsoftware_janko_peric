@@ -9,7 +9,14 @@ import jakarta.validation.constraints.Size;
 @Table(name = "contacts")
 public class Contact {
 
-  @Id private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+
+  @Column(name = "tsid")
+  @NotNull
+  @NotBlank
+  private Long tsid;
 
   @Column(name = "first_name")
   @Size(max = 25)
@@ -46,12 +53,20 @@ public class Contact {
 
   public Contact() {}
 
-  public Long getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(int id) {
     this.id = id;
+  }
+
+  public Long getTsid() {
+    return tsid;
+  }
+
+  public void setTsid(Long tsid) {
+    this.tsid = tsid;
   }
 
   public String getFirstName() {
