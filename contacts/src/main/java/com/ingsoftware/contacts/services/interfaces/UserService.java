@@ -15,7 +15,7 @@ public interface UserService {
 
   UserResponseDTO findByTsid(long tsid);
 
-  User save(UserRegistrationDTO userRegistrationDTO);
+  UserResponseDTO save(UserRegistrationDTO userRegistrationDTO);
 
   String deleteByTsid(long tsid);
 }

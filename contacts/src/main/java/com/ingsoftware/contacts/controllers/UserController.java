@@ -94,7 +94,7 @@ public class UserController {
             content = @Content)
       })
   @PostMapping("/users")
-  public User addUser(@RequestBody @Valid UserRegistrationDTO userRegistrationDTO) {
+  public UserResponseDTO addUser(@RequestBody @Valid UserRegistrationDTO userRegistrationDTO) {
     return userService.save(userRegistrationDTO);
   }
 
@@ -111,7 +111,7 @@ public class UserController {
             content = @Content)
       })
   @PutMapping("/users")
-  public User editUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
+  public UserResponseDTO editUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
     return userService.save(userRegistrationDTO);
   }
 

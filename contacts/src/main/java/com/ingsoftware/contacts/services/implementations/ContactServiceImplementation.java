@@ -4,12 +4,15 @@ import com.ingsoftware.contacts.exceptions.ContactNotFoundException;
 import com.ingsoftware.contacts.models.dtos.ContactRequestDTO;
 import com.ingsoftware.contacts.models.dtos.ContactResponseDTO;
 import com.ingsoftware.contacts.models.entities.Contact;
+import com.ingsoftware.contacts.models.entities.User;
 import com.ingsoftware.contacts.repositories.ContactRepository;
 import com.ingsoftware.contacts.repositories.UserRepository;
 import com.ingsoftware.contacts.services.interfaces.ContactService;
 import com.ingsoftware.contacts.services.mappers.ContactRequestMapper;
 import com.ingsoftware.contacts.services.mappers.ContactResponseMapper;
+import com.ingsoftware.contacts.services.mappers.ContactTypeMapper;
 import io.hypersistence.tsid.TSID;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 
@@ -23,18 +26,20 @@ public class ContactServiceImplementation implements ContactService {
   private final ContactRepository contactRepository;
   private final UserRepository userRepository;
   private final ContactRequestMapper contactRequestMapper;
-
   private final ContactResponseMapper contactResponseMapper;
 
+  private final ContactTypeMapper contactTypeMapper;
+
   public ContactServiceImplementation(
-      ContactRepository contactRepository,
-      UserRepository userRepository,
-      ContactRequestMapper contactRequestMapper,
-      ContactResponseMapper contactResponseMapper) {
+          ContactRepository contactRepository,
+          UserRepository userRepository,
+          ContactRequestMapper contactRequestMapper,
+          ContactResponseMapper contactResponseMapper, ContactTypeMapper contactTypeMapper) {
     this.contactRepository = contactRepository;
     this.userRepository = userRepository;
     this.contactRequestMapper = contactRequestMapper;
     this.contactResponseMapper = contactResponseMapper;
+    this.contactTypeMapper = contactTypeMapper;
   }
 
   @Override
@@ -83,9 +88,16 @@ public class ContactServiceImplementation implements ContactService {
   }
 
   @Override
-  public Contact save(ContactRequestDTO contactRequestDTO) {
+  public Contact save(ContactRequestDTO contactRequestDTO, HttpSession session) {
     Contact contact = contactRequestMapper.toEntity(contactRequestDTO);
 
+    // find who the logged user is and set it for new contact
+    long tsidUser = (long) session.getAttribute("tsid");
+    User user = userRepository.findByTsid(tsidUser);
+    contact.setUser(user);
+
+
+    // generate tsid for contact
     long tsid = TSID.fast().toLong();
     contact.setTsid(tsid);
 
