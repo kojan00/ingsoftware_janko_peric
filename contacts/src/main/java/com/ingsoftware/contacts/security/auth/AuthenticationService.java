@@ -48,10 +48,13 @@ public class AuthenticationService {
               new UsernamePasswordAuthenticationToken(
                   loginRequestDTO.email(), loginRequestDTO.password()));
 
+      long tsid = userRepository.findByEmail(loginRequestDTO.email()).getTsid();
+
       SecurityContext sc = SecurityContextHolder.getContext();
       sc.setAuthentication(authenticate);
       HttpSession session = request.getSession(true);
       session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
+      session.setAttribute("tsid", tsid);
 
       return ResponseEntity.ok().body("Login successful.");
 

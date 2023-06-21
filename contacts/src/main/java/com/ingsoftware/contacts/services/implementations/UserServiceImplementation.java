@@ -66,7 +66,7 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
-  public User save(UserRegistrationDTO userRegistrationDTO) {
+  public UserResponseDTO save(UserRegistrationDTO userRegistrationDTO) {
     User user = userRegistrationMapper.toEntity(userRegistrationDTO);
 
     TSID tsid = TSID.fast();
@@ -74,13 +74,14 @@ public class UserServiceImplementation implements UserService {
 
     String encodedPassword = passwordEncoder.encode(userRegistrationDTO.password());
     user.setPassword(encodedPassword);
-    return userRepository.save(user);
+    userRepository.save(user);
+    return userMapper.toDto(user);
   }
 
   @Override
   @Transactional
   public String deleteByTsid(long tsid) {
-    System.out.println("found");
+    UserResponseDTO userResponseDTO = findByTsid(tsid);
     userRepository.deleteByTsid(tsid);
     return "User has been deleted successfully!";
   }
