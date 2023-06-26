@@ -53,21 +53,17 @@ public class ContactController {
   }
 
   @PostMapping("/import-contacts")
-  public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+  public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, HttpSession session) {
     // Check if the file is not empty
     if (file.isEmpty()) {
       return ResponseEntity.badRequest().body("Uploaded file is empty");
     }
 
-    // Get the file name
-    String fileName = file.getOriginalFilename();
-    System.out.println(fileName);
+    // Fetch the logged user
+    long tsidUser = (long) session.getAttribute("tsid");
+    String message = csvService.importContacts(file, tsidUser);
 
-    // Process the file (e.g., read its content, parse CSV data, save to a database, etc.)
-    // ...
-
-    // Return a response indicating the successful upload
-    return ResponseEntity.ok("File uploaded successfully");
+    return ResponseEntity.ok("File uploaded successfully.\n\n" + message);
   }
 
   @Operation(
@@ -226,8 +222,8 @@ public class ContactController {
             description = "Internal server error.",
             content = @Content)
       })
-  @PostMapping("/users/contacts")
-  public Contact addContact(@RequestBody ContactRequestDTO contactRequestDTO, HttpSession session) {
+  @PostMapping("/contacts")
+  public ContactResponseDTO addContact(@RequestBody ContactRequestDTO contactRequestDTO, HttpSession session) {
     return contactService.save(contactRequestDTO, session);
   }
 
@@ -248,7 +244,7 @@ public class ContactController {
             description = "Internal server error.",
             content = @Content)
       })
-  @DeleteMapping("/users/contacts/{tsid}")
+  @DeleteMapping("/contacts/{tsid}")
   public String deleteContact(@PathVariable long tsid) {
     return contactService.deleteByTsid(tsid);
   }

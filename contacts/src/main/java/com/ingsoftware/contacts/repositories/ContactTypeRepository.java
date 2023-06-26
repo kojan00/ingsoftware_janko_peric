@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 public interface ContactTypeRepository extends JpaRepository<ContactType, Integer> {
   ContactType findByTsid(long tsid);
 
+  ContactType findByType(String type);
+
   @Modifying
   @Transactional
   @Query("UPDATE ContactType ct SET ct.type = :type WHERE ct.tsid = :tsid")

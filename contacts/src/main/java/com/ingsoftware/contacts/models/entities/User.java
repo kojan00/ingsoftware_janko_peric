@@ -60,7 +60,19 @@ public class User implements UserDetails, GrantedAuthority {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Contact> contacts;
 
-  public User() {}
+  @Column(name = "phone_number")
+  @Size(max = 25)
+  @NotNull
+  @NotBlank(message = "Phone is mandatory.")
+  private String phoneNumber;
+
+  @Column(name = "phone_verified")
+  private boolean isPhoneVerified = false;
+
+  @Transient
+  private boolean isAccountNonLocked = true;
+  public User() {
+  }
 
   public int getId() {
     return id;
@@ -126,6 +138,22 @@ public class User implements UserDetails, GrantedAuthority {
     this.contacts = contacts;
   }
 
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public boolean isPhoneVerified() {
+    return isPhoneVerified;
+  }
+
+  public void setPhoneVerified(boolean phoneVerified) {
+    isPhoneVerified = phoneVerified;
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     List<GrantedAuthority> list = new ArrayList<>();
@@ -145,7 +173,11 @@ public class User implements UserDetails, GrantedAuthority {
 
   @Override
   public boolean isAccountNonLocked() {
-    return true;
+    return isAccountNonLocked;
+  }
+
+  public void setAccountNonLocked() {
+    this.isAccountNonLocked = true;
   }
 
   @Override
@@ -162,4 +194,5 @@ public class User implements UserDetails, GrantedAuthority {
   public String getAuthority() {
     return role.toString();
   }
+
 }

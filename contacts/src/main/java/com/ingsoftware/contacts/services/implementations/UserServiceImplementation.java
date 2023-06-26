@@ -56,7 +56,6 @@ public class UserServiceImplementation implements UserService {
   @Override
   public UserResponseDTO findByTsid(long tsid) {
     User user = userRepository.findByTsid(tsid);
-
     if (user == null) {
       throw new UserNotFoundException();
     }

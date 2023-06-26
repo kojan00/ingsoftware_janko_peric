@@ -13,6 +13,8 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
   Contact findByTsid(long tsid);
 
+  Contact findByPhoneNumber(String phoneNumber);
+
   @Query("SELECT c FROM Contact c WHERE c.user.tsid=?1")
   List<Contact> findAllByUser(long tsid);
 

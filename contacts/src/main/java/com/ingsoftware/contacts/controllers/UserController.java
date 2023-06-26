@@ -3,11 +3,13 @@ package com.ingsoftware.contacts.controllers;
 import com.ingsoftware.contacts.models.dtos.UserResponseDTO;
 import com.ingsoftware.contacts.models.dtos.UserRegistrationDTO;
 import com.ingsoftware.contacts.models.entities.User;
+import com.ingsoftware.contacts.services.implementations.EmailService;
 import com.ingsoftware.contacts.services.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +26,28 @@ public class UserController {
 
   private final UserService userService;
 
-  public UserController(UserService userService) {
+  private final EmailService emailService;
+
+  public UserController(UserService userService, EmailService emailService) {
     this.userService = userService;
+    this.emailService = emailService;
+  }
+
+  @RequestMapping(value = "/email", method = RequestMethod.POST)
+  @ResponseBody
+  public String sendMail(@RequestBody User user)
+      throws MessagingException {
+    try {
+      emailService.sendMail(user);
+    } catch (javax.mail.MessagingException e) {
+      throw new RuntimeException(e);
+    }
+    return "Email Sent Successfully.!";
+  }
+
+  @RequestMapping(value = "/confirmed-mail")
+  public String confirmed() {
+    return "confirmed";
   }
 
   @GetMapping("/users")

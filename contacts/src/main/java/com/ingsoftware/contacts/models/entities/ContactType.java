@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity
 @Table(name = "contact_type")
 public class ContactType {
@@ -21,6 +23,9 @@ public class ContactType {
   @NotBlank
   @Size(max = 25)
   private String type;
+
+  @OneToMany(mappedBy = "contactType", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Contact> contacts;
 
   public ContactType() {}
 
@@ -47,4 +52,13 @@ public class ContactType {
   public void setType(String type) {
     this.type = type;
   }
+
+  public List<Contact> getContacts() {
+    return contacts;
+  }
+
+  public void setContacts(List<Contact> contacts) {
+    this.contacts = contacts;
+  }
+  
 }
