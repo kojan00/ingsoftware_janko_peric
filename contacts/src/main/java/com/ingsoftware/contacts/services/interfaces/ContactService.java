@@ -22,7 +22,7 @@ public interface ContactService {
 
   List<ContactResponseDTO> findAllByPhoneNumberKeyword(long tsid, String keyword);
 
-  Contact save(ContactRequestDTO contactRequestDTO, HttpSession session);
+  ContactResponseDTO save(ContactRequestDTO contactRequestDTO, HttpSession session);
 
   String deleteByTsid(long tsid);
 }

@@ -12,6 +12,7 @@ public interface ContactTypeService {
 
   ContactTypeDTO findByTsid(long tsid);
 
+
   ContactType save(ContactTypeDTO contactTypeDTO);
 
   void updateContactType(String type, long tsid);

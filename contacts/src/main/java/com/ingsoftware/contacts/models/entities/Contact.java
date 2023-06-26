@@ -15,7 +15,6 @@ public class Contact {
 
   @Column(name = "tsid")
   @NotNull
-  @NotBlank
   private Long tsid;
 
   @Column(name = "first_name")
@@ -40,10 +39,9 @@ public class Contact {
   @NotBlank(message = "Phone number is mandatory.")
   private String phoneNumber;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "contact_type")
   @NotNull
-  @NotBlank(message = "Contact type is mandatory.")
   private ContactType contactType;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -53,7 +51,10 @@ public class Contact {
 
   public Contact() {}
 
-  public int getId() {
+    public Contact(String firstName, String lastName, String address, String phoneNumber, ContactType contactType) {
+    }
+
+    public int getId() {
     return id;
   }
 
@@ -116,4 +117,5 @@ public class Contact {
   public void setUser(User user) {
     this.user = user;
   }
+
 }

@@ -4,8 +4,10 @@ import com.ingsoftware.contacts.exceptions.ContactNotFoundException;
 import com.ingsoftware.contacts.models.dtos.ContactRequestDTO;
 import com.ingsoftware.contacts.models.dtos.ContactResponseDTO;
 import com.ingsoftware.contacts.models.entities.Contact;
+import com.ingsoftware.contacts.models.entities.ContactType;
 import com.ingsoftware.contacts.models.entities.User;
 import com.ingsoftware.contacts.repositories.ContactRepository;
+import com.ingsoftware.contacts.repositories.ContactTypeRepository;
 import com.ingsoftware.contacts.repositories.UserRepository;
 import com.ingsoftware.contacts.services.interfaces.ContactService;
 import com.ingsoftware.contacts.services.mappers.ContactRequestMapper;
@@ -28,17 +30,20 @@ public class ContactServiceImplementation implements ContactService {
   private final ContactRequestMapper contactRequestMapper;
   private final ContactResponseMapper contactResponseMapper;
 
+  private final ContactTypeRepository contactTypeRepository;
+
   private final ContactTypeMapper contactTypeMapper;
 
   public ContactServiceImplementation(
           ContactRepository contactRepository,
           UserRepository userRepository,
           ContactRequestMapper contactRequestMapper,
-          ContactResponseMapper contactResponseMapper, ContactTypeMapper contactTypeMapper) {
+          ContactResponseMapper contactResponseMapper, ContactTypeRepository contactTypeRepository, ContactTypeMapper contactTypeMapper) {
     this.contactRepository = contactRepository;
     this.userRepository = userRepository;
     this.contactRequestMapper = contactRequestMapper;
     this.contactResponseMapper = contactResponseMapper;
+    this.contactTypeRepository = contactTypeRepository;
     this.contactTypeMapper = contactTypeMapper;
   }
 
@@ -88,7 +93,7 @@ public class ContactServiceImplementation implements ContactService {
   }
 
   @Override
-  public Contact save(ContactRequestDTO contactRequestDTO, HttpSession session) {
+  public ContactResponseDTO save(ContactRequestDTO contactRequestDTO, HttpSession session) {
     Contact contact = contactRequestMapper.toEntity(contactRequestDTO);
 
     // find who the logged user is and set it for new contact
@@ -101,7 +106,12 @@ public class ContactServiceImplementation implements ContactService {
     long tsid = TSID.fast().toLong();
     contact.setTsid(tsid);
 
-    return contactRepository.save(contact);
+    ContactType contactType = contactTypeRepository.findByType(contactRequestDTO.contactType().getType());
+    contact.setContactType(contactType);
+
+    contactRepository.save(contact);
+
+    return contactResponseMapper.toDto(contact);
   }
 
   @Override
