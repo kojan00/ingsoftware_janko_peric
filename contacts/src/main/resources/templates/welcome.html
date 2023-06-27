@@ -11,7 +11,7 @@
 <body>
 <div>Welcome <b th:text="${user.firstName}"></b>. This is a confirmation link sent t</div>
 
-<div> <a th:href="${user.setAccountNonLocked()}" th:target="_blank">
+<div> <a th:href="@{http://localhost:8080/login ${user.setAccountNonLocked()}}" target="_blank">
     Confirm your account
 </a></b></div></body>
 </html>

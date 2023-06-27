@@ -83,7 +83,21 @@ public class CsvService {
 
       Iterable<CSVRecord> records = csvParser.getRecords();
 
+
+      outerloop:
       for (CSVRecord record : records) {
+        if (!record.isConsistent()) {
+          System.out.println("inconsistent");
+          failedContacts++;
+          continue;
+        }
+        for (String value : record) {
+          if (value.isBlank()) {
+            System.out.println("blank");
+            failedContacts++;
+            continue outerloop;
+          }
+        }
         String firstName = record.get("First name");
         String lastName = record.get("Last name");
         String address = record.get("Address");
