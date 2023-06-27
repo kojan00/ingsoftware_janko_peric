@@ -42,6 +42,7 @@ public class WebSecurityConfig {
               auth.requestMatchers("/contact-management/**").hasRole("USER");
               auth.anyRequest().authenticated();
             });
+    http.formLogin();
 
     return http.build();
   }

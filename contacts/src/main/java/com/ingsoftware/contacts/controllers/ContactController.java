@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Size;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -53,10 +54,17 @@ public class ContactController {
   }
 
   @PostMapping("/import-contacts")
-  public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, HttpSession session) {
+  public ResponseEntity<String> uploadFile(
+      @RequestParam("file") MultipartFile file, HttpSession session) {
+
     // Check if the file is not empty
     if (file.isEmpty()) {
-      return ResponseEntity.badRequest().body("Uploaded file is empty");
+      return ResponseEntity.badRequest().body("Uploaded file is empty!");
+    }
+
+    // Check if the file is in correct format (CSV)
+    if (!FilenameUtils.getExtension(file.getOriginalFilename()).equalsIgnoreCase("csv")) {
+      return ResponseEntity.badRequest().body("Uploaded file must be in .csv format!");
     }
 
     // Fetch the logged user
@@ -183,7 +191,7 @@ public class ContactController {
       })
   @GetMapping("/contacts/address={keyword}")
   public List<ContactResponseDTO> findAllByAddressKeyword(
-          @PathVariable @Size(min = 3, max = 15) String keyword, HttpSession session) {
+      @PathVariable @Size(min = 3, max = 15) String keyword, HttpSession session) {
     long tsidUser = (long) session.getAttribute("tsid");
     return contactService.findAllByAddressKeyword(tsidUser, keyword);
   }
@@ -223,7 +231,8 @@ public class ContactController {
             content = @Content)
       })
   @PostMapping("/contacts")
-  public ContactResponseDTO addContact(@RequestBody ContactRequestDTO contactRequestDTO, HttpSession session) {
+  public ContactResponseDTO addContact(
+      @RequestBody ContactRequestDTO contactRequestDTO, HttpSession session) {
     return contactService.save(contactRequestDTO, session);
   }
 
