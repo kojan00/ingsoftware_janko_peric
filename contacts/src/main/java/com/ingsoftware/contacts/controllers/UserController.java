@@ -2,18 +2,18 @@ package com.ingsoftware.contacts.controllers;
 
 import com.ingsoftware.contacts.models.dtos.UserResponseDTO;
 import com.ingsoftware.contacts.models.dtos.UserRegistrationDTO;
-import com.ingsoftware.contacts.models.entities.User;
-import com.ingsoftware.contacts.services.implementations.EmailService;
+import com.ingsoftware.contacts.services.implementations.PhoneService;
 import com.ingsoftware.contacts.services.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,28 +26,31 @@ public class UserController {
 
   private final UserService userService;
 
-  private final EmailService emailService;
+  private final PhoneService phoneService;
 
-  public UserController(UserService userService, EmailService emailService) {
+  public UserController(UserService userService, PhoneService phoneService) {
     this.userService = userService;
-    this.emailService = emailService;
+    this.phoneService = phoneService;
   }
 
-  @RequestMapping(value = "/email", method = RequestMethod.POST)
-  @ResponseBody
-  public String sendMail(@RequestBody User user)
-      throws MessagingException {
-    try {
-      emailService.sendMail(user);
-    } catch (javax.mail.MessagingException e) {
-      throw new RuntimeException(e);
-    }
-    return "Email Sent Successfully.!";
+  @GetMapping("/verify-email/{email}")
+  public String verifyEmail(@PathVariable String email) {
+    String message = userService.verifyEmail(email);
+    return message;
   }
 
-  @RequestMapping(value = "/confirmed-mail")
-  public String confirmed() {
-    return "confirmed";
+  @GetMapping("/verify-phone/generate-verification-code")
+  public ResponseEntity generatePhoneVerificationCode(HttpSession session) {
+    long tsid = (long) session.getAttribute("tsid");
+
+    return phoneService.generateVerificationCode(tsid);
+  }
+
+  @GetMapping("/verify-phone/verify-code/{code}")
+  public ResponseEntity verifyPhoneVerificationCode(@PathVariable String code, HttpSession session) {
+    long tsid = (long) session.getAttribute("tsid");
+
+    return phoneService.verifyCode(tsid, code);
   }
 
   @GetMapping("/users")

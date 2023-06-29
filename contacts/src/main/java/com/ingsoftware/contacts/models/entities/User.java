@@ -67,12 +67,12 @@ public class User implements UserDetails, GrantedAuthority {
   private String phoneNumber;
 
   @Column(name = "phone_verified")
-  private boolean isPhoneVerified = false;
+  private boolean isPhoneVerified;
 
-  @Transient
-  private boolean isAccountNonLocked = true;
-  public User() {
-  }
+  @Column(name = "email_verified")
+  private boolean isEmailVerified;
+
+  public User() {}
 
   public int getId() {
     return id;
@@ -154,6 +154,14 @@ public class User implements UserDetails, GrantedAuthority {
     isPhoneVerified = phoneVerified;
   }
 
+  public boolean isEmailVerified() {
+    return isEmailVerified;
+  }
+
+  public void setEmailVerified(boolean emailVerified) {
+    isEmailVerified = emailVerified;
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     List<GrantedAuthority> list = new ArrayList<>();
@@ -173,12 +181,7 @@ public class User implements UserDetails, GrantedAuthority {
 
   @Override
   public boolean isAccountNonLocked() {
-    return isAccountNonLocked;
-  }
-
-  public void setAccountNonLocked() {
-    System.out.println("scuccesc");
-    this.isAccountNonLocked = true;
+    return true;
   }
 
   @Override
@@ -195,5 +198,4 @@ public class User implements UserDetails, GrantedAuthority {
   public String getAuthority() {
     return role.toString();
   }
-
 }

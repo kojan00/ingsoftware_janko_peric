@@ -3,6 +3,7 @@ package com.ingsoftware.contacts.services.implementations;
 import com.ingsoftware.contacts.exceptions.UserNotFoundException;
 import com.ingsoftware.contacts.models.dtos.UserResponseDTO;
 import com.ingsoftware.contacts.models.dtos.UserRegistrationDTO;
+import com.ingsoftware.contacts.models.entities.Role;
 import com.ingsoftware.contacts.models.entities.User;
 import com.ingsoftware.contacts.repositories.UserRepository;
 import com.ingsoftware.contacts.services.interfaces.UserService;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @Service
@@ -27,15 +29,19 @@ public class UserServiceImplementation implements UserService {
 
   private final PasswordEncoder passwordEncoder;
 
+  private final EmailService emailService;
+
   public UserServiceImplementation(
       UserRepository userRepository,
       UserMapper userMapper,
       UserRegistrationMapper userRegistrationMapper,
-      PasswordEncoder passwordEncoder) {
+      PasswordEncoder passwordEncoder,
+      EmailService emailService) {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
     this.userRegistrationMapper = userRegistrationMapper;
     this.passwordEncoder = passwordEncoder;
+    this.emailService = emailService;
   }
 
   @Override
@@ -65,6 +71,18 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
+  public String verifyEmail(String email) {
+    User user = userRepository.findByEmail(email);
+
+    if (user == null) {
+      return "Email verification failed.";
+    }
+    user.setEmailVerified(true);
+    userRepository.save(user);
+    return "Email successfully verified.";
+  }
+
+  @Override
   public UserResponseDTO save(UserRegistrationDTO userRegistrationDTO) {
     User user = userRegistrationMapper.toEntity(userRegistrationDTO);
 
@@ -73,7 +91,22 @@ public class UserServiceImplementation implements UserService {
 
     String encodedPassword = passwordEncoder.encode(userRegistrationDTO.password());
     user.setPassword(encodedPassword);
+
+    if (user.getRole() == Role.ADMIN) {
+      user.setEmailVerified(true);
+    }
+
     userRepository.save(user);
+
+    // send the verification email
+    try {
+      emailService.sendMail(user);
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    } catch (jakarta.mail.MessagingException e) {
+      throw new RuntimeException(e);
+    }
+
     return userMapper.toDto(user);
   }
 
