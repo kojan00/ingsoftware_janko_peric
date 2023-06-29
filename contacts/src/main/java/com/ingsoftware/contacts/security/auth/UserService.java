@@ -2,6 +2,7 @@ package com.ingsoftware.contacts.security.auth;
 
 import com.ingsoftware.contacts.models.entities.User;
 import com.ingsoftware.contacts.repositories.UserRepository;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +26,10 @@ public class UserService implements UserDetailsService {
     User user = userRepository.findByEmail(email);
     if (user == null) {
       throw new UsernameNotFoundException("Bad credentials");
+    }
+
+    if (!user.isEmailVerified()) {
+      throw new LockedException("Account is not verified.");
     }
     return userRepository.findByEmail(email);
   }

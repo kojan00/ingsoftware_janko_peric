@@ -6,12 +6,12 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Email</title>
+    <title>Email verification for account activation</title>
 </head>
 <body>
 <div>Welcome <b th:text="${user.firstName}"></b>. This is a confirmation link sent t</div>
 
-<div> <a th:href="@{http://localhost:8080/login ${user.setAccountNonLocked()}}" target="_blank">
-    Confirm your account
-</a></b></div></body>
+<a th:href="@{http://localhost:8080/user-management/verify-email/{email}(email=${user.getEmail()})}" target="_blank"> Confirm account</a>
+
+</body>
 </html>

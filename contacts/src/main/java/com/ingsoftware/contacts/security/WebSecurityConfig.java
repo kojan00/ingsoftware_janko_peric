@@ -23,6 +23,7 @@ public class WebSecurityConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+
   @Bean
   public AuthenticationManager authManager(UserDetailsService detailsService) {
     DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -36,10 +37,17 @@ public class WebSecurityConfig {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
             auth -> {
-              auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/auth/**").permitAll();
+              auth.requestMatchers(
+                      "/v3/api-docs/**",
+                      "/swagger-ui/**",
+                      "/swagger-ui.html",
+                      "/auth/**",
+                      "/user-management/verify-email/**")
+                  .permitAll();
+              auth.requestMatchers("/contact-management/**", "/user-management/verify-phone/**")
+                  .hasRole("USER");
               auth.requestMatchers("/user-management/**").hasRole("ADMIN");
               auth.requestMatchers("/contact-types/**").hasRole("ADMIN");
-              auth.requestMatchers("/contact-management/**").hasRole("USER");
               auth.anyRequest().authenticated();
             });
     http.formLogin();

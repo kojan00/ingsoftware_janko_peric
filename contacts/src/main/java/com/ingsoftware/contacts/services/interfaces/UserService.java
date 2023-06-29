@@ -15,6 +15,8 @@ public interface UserService {
 
   UserResponseDTO findByTsid(long tsid);
 
+  String verifyEmail(String email);
+
   UserResponseDTO save(UserRegistrationDTO userRegistrationDTO);
 
   String deleteByTsid(long tsid);
