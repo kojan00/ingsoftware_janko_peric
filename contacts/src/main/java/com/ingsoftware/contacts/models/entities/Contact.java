@@ -51,10 +51,31 @@ public class Contact {
 
   public Contact() {}
 
-    public Contact(String firstName, String lastName, String address, String phoneNumber, ContactType contactType) {
-    }
+  public Contact(
+      String firstName,
+      String lastName,
+      String address,
+      String phoneNumber,
+      ContactType contactType) {}
 
-    public int getId() {
+  public Contact(
+      @NotNull Long tsid,
+      @NotNull String firstName,
+      @NotNull String lastName,
+      String address,
+      @NotNull String phoneNumber,
+      @NotNull ContactType contactType,
+      @NotNull User user) {
+    this.tsid = tsid;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.address = address;
+    this.phoneNumber = phoneNumber;
+    this.contactType = contactType;
+    this.user = user;
+  }
+
+  public int getId() {
     return id;
   }
 
@@ -117,5 +138,4 @@ public class Contact {
   public void setUser(User user) {
     this.user = user;
   }
-
 }

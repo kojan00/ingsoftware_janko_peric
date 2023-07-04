@@ -29,6 +29,11 @@ public class ContactType {
 
   public ContactType() {}
 
+  public ContactType(Long tsid, @NotNull String type) {
+    this.tsid = tsid;
+    this.type = type;
+  }
+
   public int getId() {
     return id;
   }
