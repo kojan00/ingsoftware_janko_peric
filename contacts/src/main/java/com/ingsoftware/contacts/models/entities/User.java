@@ -74,6 +74,23 @@ public class User implements UserDetails, GrantedAuthority {
 
   public User() {}
 
+  public User(
+      @NotNull Long tsid,
+      String firstName,
+      @NotNull String lastName,
+      @NotNull String email,
+      @NotNull String password,
+      @NotNull Role role,
+      @NotNull String phoneNumber) {
+    this.tsid = tsid;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.password = password;
+    this.role = role;
+    this.phoneNumber = phoneNumber;
+  }
+
   public int getId() {
     return id;
   }
