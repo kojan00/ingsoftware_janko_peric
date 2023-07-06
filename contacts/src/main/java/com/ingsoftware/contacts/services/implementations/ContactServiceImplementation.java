@@ -16,6 +16,7 @@ import com.ingsoftware.contacts.services.mappers.ContactTypeMapper;
 import io.hypersistence.tsid.TSID;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
@@ -65,34 +66,35 @@ public class ContactServiceImplementation implements ContactService {
   }
 
   @Override
-  public List<ContactResponseDTO> findAllByFirstNameKeyword(long tsid, String keyword) {
-    List<Contact> contacts = contactRepository.findAllByFirstNameKeyword(tsid, keyword);
+  public List<ContactResponseDTO> findAllByFirstNameKeyword(long tsid, String keyword, Pageable pageable) {
+    List<Contact> contacts = contactRepository.findAllByFirstNameKeyword(tsid, keyword, pageable);
     List<ContactResponseDTO> contactResponseDTOS = contactResponseMapper.toDtolist(contacts);
     return contactResponseDTOS;
   }
 
   @Override
-  public List<ContactResponseDTO> findAllByLastNameKeyword(long tsid, String keyword) {
-    List<Contact> contacts = contactRepository.findAllByLastNameKeyword(tsid, keyword);
+  public List<ContactResponseDTO> findAllByLastNameKeyword(long tsid, String keyword, Pageable pageable) {
+    List<Contact> contacts = contactRepository.findAllByLastNameKeyword(tsid, keyword, pageable);
     List<ContactResponseDTO> contactResponseDTOS = contactResponseMapper.toDtolist(contacts);
     return contactResponseDTOS;
   }
 
   @Override
-  public List<ContactResponseDTO> findAllByPhoneNumberKeyword(long tsid, String keyword) {
-    List<Contact> contacts = contactRepository.findAllByPhoneNumberKeyword(tsid, keyword);
+  public List<ContactResponseDTO> findAllByPhoneNumberKeyword(long tsid, String keyword, Pageable pageable) {
+    List<Contact> contacts = contactRepository.findAllByPhoneNumberKeyword(tsid, keyword, pageable);
     List<ContactResponseDTO> contactResponseDTOS = contactResponseMapper.toDtolist(contacts);
     return contactResponseDTOS;
   }
 
   @Override
-  public List<ContactResponseDTO> findAllByAddressKeyword(long tsid, String keyword) {
-    List<Contact> contacts = contactRepository.findAllByAddressKeyword(tsid, keyword);
+  public List<ContactResponseDTO> findAllByAddressKeyword(long tsid, String keyword, Pageable pageable) {
+    List<Contact> contacts = contactRepository.findAllByAddressKeyword(tsid, keyword, pageable);
     List<ContactResponseDTO> contactResponseDTOS = contactResponseMapper.toDtolist(contacts);
     return contactResponseDTOS;
   }
 
   @Override
+  @Transactional
   public ContactResponseDTO save(ContactRequestDTO contactRequestDTO, HttpSession session) {
     Contact contact = contactRequestMapper.toEntity(contactRequestDTO);
 

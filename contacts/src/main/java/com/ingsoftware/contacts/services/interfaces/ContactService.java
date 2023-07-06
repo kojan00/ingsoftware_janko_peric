@@ -14,13 +14,13 @@ public interface ContactService {
 
   List<ContactResponseDTO> findAllByUser(long tsid);
 
-  List<ContactResponseDTO> findAllByAddressKeyword(long tsid, String keyword);
+  List<ContactResponseDTO> findAllByAddressKeyword(long tsid, String keyword, Pageable pageable);
 
-  List<ContactResponseDTO> findAllByFirstNameKeyword(long tsid, String keyword);
+  List<ContactResponseDTO> findAllByFirstNameKeyword(long tsid, String keyword, Pageable pageable);
 
-  List<ContactResponseDTO> findAllByLastNameKeyword(long tsid, String keyword);
+  List<ContactResponseDTO> findAllByLastNameKeyword(long tsid, String keyword, Pageable pageable);
 
-  List<ContactResponseDTO> findAllByPhoneNumberKeyword(long tsid, String keyword);
+  List<ContactResponseDTO> findAllByPhoneNumberKeyword(long tsid, String keyword, Pageable pageable);
 
   ContactResponseDTO save(ContactRequestDTO contactRequestDTO, HttpSession session);
 

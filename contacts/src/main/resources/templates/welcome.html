@@ -9,9 +9,12 @@
     <title>Email verification for account activation</title>
 </head>
 <body>
-<div>Welcome <b th:text="${user.firstName}"></b>. This is a confirmation link sent t</div>
+<div>Welcome <b th:text="${user.firstName}"></b>. This is a confirmation link sent to you after registering in
+    ContactsApp. Your email needs to be verified
+</div>
 
-<a th:href="@{http://localhost:8080/user-management/verify-email/{email}(email=${user.getEmail()})}" target="_blank"> Confirm account</a>
+<a th:href="@{http://localhost:8080/user-management/verify-email/{email}(email=${user.getEmail()})}" target="_blank">
+    Verify account</a>
 
 </body>
 </html>
