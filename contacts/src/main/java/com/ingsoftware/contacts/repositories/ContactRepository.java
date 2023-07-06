@@ -1,6 +1,7 @@
 package com.ingsoftware.contacts.repositories;
 
 import com.ingsoftware.contacts.models.entities.Contact;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,21 +22,21 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
   @Query(
       "SELECT c FROM Contact c WHERE c.user.tsid=:tsid AND lower(c.firstName) LIKE lower(concat('%', :keyword,'%'))")
   List<Contact> findAllByFirstNameKeyword(
-      @Param("tsid") long tsid, @Param("keyword") String keyword);
+          @Param("tsid") long tsid, @Param("keyword") String keyword, Pageable pageable);
 
   @Query(
       "SELECT c FROM Contact c WHERE c.user.tsid=:tsid AND lower(c.lastName) LIKE lower(concat('%', :keyword,'%'))")
   List<Contact> findAllByLastNameKeyword(
-      @Param("tsid") long tsid, @Param("keyword") String keyword);
+      @Param("tsid") long tsid, @Param("keyword") String keyword, Pageable pageable);
 
   @Query(
       "SELECT c FROM Contact c WHERE c.user.tsid=:tsid AND lower(c.address) LIKE lower(concat('%', :keyword,'%'))")
-  List<Contact> findAllByAddressKeyword(@Param("tsid") long tsid, @Param("keyword") String keyword);
+  List<Contact> findAllByAddressKeyword(@Param("tsid") long tsid, @Param("keyword") String keyword, Pageable pageable);
 
   @Query(
       "SELECT c FROM Contact c WHERE c.user.tsid=:tsid AND lower(c.phoneNumber) LIKE lower(concat('%', :keyword,'%'))")
   List<Contact> findAllByPhoneNumberKeyword(
-      @Param("tsid") long id, @Param("keyword") String keyword);
+      @Param("tsid") long id, @Param("keyword") String keyword, Pageable pageable);
 
   String deleteByTsid(long tsid);
 }

@@ -22,7 +22,7 @@ public class EmailService {
     this.javaMailSender = javaMailSender;
   }
 
-  public String sendMail(User user) throws MessagingException, jakarta.mail.MessagingException {
+  public void sendMail(User user) throws MessagingException, jakarta.mail.MessagingException {
     Context context = new Context();
     context.setVariable("user", user);
 
@@ -34,6 +34,5 @@ public class EmailService {
     helper.setText(process, true);
     helper.setTo(user.getEmail());
     javaMailSender.send(mimeMessage);
-    return "Sent";
   }
 }

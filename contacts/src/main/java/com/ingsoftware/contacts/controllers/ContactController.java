@@ -24,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.util.List;
 
@@ -41,9 +42,22 @@ public class ContactController {
     this.csvService = csvService;
   }
 
-  @GetMapping("/export-contacts/{tsid}")
-  public ResponseEntity<Resource> exportContacts(@PathVariable long tsid) throws IOException {
+  @Operation(
+      summary = "Export contacts to a csv file",
+      description = "Generates a csv file containing all of the contacts that logged in user has.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "Returns a generated csv file.", content = @Content(mediaType = "application/csv")),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal server error.",
+            content = @Content)
+      })
+  @GetMapping(value = "/export-contacts")
+  public ResponseEntity<Resource> exportContacts(HttpSession session) throws IOException {
+    long tsid = (long) session.getAttribute("tsid");
     List<ContactResponseDTO> contactResponseDTOS = contactService.findAllByUser(tsid);
+
     String filename = "contacts.csv";
     InputStreamResource resource = new InputStreamResource(csvService.load(contactResponseDTOS));
 
@@ -53,13 +67,40 @@ public class ContactController {
         .body(resource);
   }
 
+  @Operation(
+      summary = "Import contacts from a csv file",
+      description =
+          "Reads through provided csv file and tries to save the contacts to database. Notifies the user how many were successfully saved and how many failed.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description =
+                "Returns how many contacts were saved and how many failed.\n"
+                    + "Example: File uploaded successfully.\n"
+                    + "\n"
+                    + "Succesfully imported 3 contacts. Failed to import 0 contacts.",
+        content = @Content),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Uploaded file is empty or missing!",
+            content = @Content),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Uploaded file must be in .csv format!",
+            content = @Content),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal server error.",
+            content = @Content)
+      })
   @PostMapping("/import-contacts")
   public ResponseEntity<String> uploadFile(
       @RequestParam("file") MultipartFile file, HttpSession session) {
 
     // Check if the file is not empty
     if (file.isEmpty()) {
-      return ResponseEntity.badRequest().body("Uploaded file is empty!");
+      return ResponseEntity.badRequest().body("Uploaded file is empty or missing!");
     }
 
     // Check if the file is in correct format (CSV)
@@ -114,11 +155,12 @@ public class ContactController {
             description = "Internal server error.",
             content = @Content)
       })
-  @GetMapping("/contacts/first-name={keyword}")
+  @GetMapping("/contacts/first-name={keyword}/page={page}/size={size}")
   public List<ContactResponseDTO> findAllByFirstNameKeyword(
-      @PathVariable @Size(min = 3, max = 15) String keyword, HttpSession session) {
+      @PathVariable @Size(min = 3, max = 15) String keyword, @PathVariable int page, @PathVariable int size, HttpSession session) {
     long tsidUser = (long) session.getAttribute("tsid");
-    return contactService.findAllByFirstNameKeyword(tsidUser, keyword);
+    Pageable pageable = PageRequest.of(page, size);
+    return contactService.findAllByFirstNameKeyword(tsidUser, keyword, pageable);
   }
 
   @Operation(
@@ -139,11 +181,12 @@ public class ContactController {
             description = "Internal server error.",
             content = @Content)
       })
-  @GetMapping("/contacts/last-name={keyword}")
+  @GetMapping("/contacts/last-name={keyword}/page={page}/size={size}")
   public List<ContactResponseDTO> findAllByLastNameKeyword(
-      @PathVariable @Size(min = 3, max = 15) String keyword, HttpSession session) {
+      @PathVariable @Size(min = 3, max = 15) String keyword, @PathVariable int page, @PathVariable int size, HttpSession session) {
     long tsidUser = (long) session.getAttribute("tsid");
-    return contactService.findAllByLastNameKeyword(tsidUser, keyword);
+    Pageable pageable = PageRequest.of(page, size);
+    return contactService.findAllByLastNameKeyword(tsidUser, keyword, pageable);
   }
 
   @Operation(
@@ -164,11 +207,12 @@ public class ContactController {
             description = "Internal server error.",
             content = @Content)
       })
-  @GetMapping("/contacts/phone-number={keyword}")
+  @GetMapping("/contacts/phone-number={keyword}/page={page}/size={size}")
   public List<ContactResponseDTO> findAllByPhoneNumberKeyword(
-      @PathVariable @Size(min = 3, max = 15) String keyword, HttpSession session) {
+      @PathVariable @Size(min = 3, max = 15) String keyword, @PathVariable int page, @PathVariable int size, HttpSession session) {
     long tsidUser = (long) session.getAttribute("tsid");
-    return contactService.findAllByPhoneNumberKeyword(tsidUser, keyword);
+    Pageable pageable = PageRequest.of(page, size);
+    return contactService.findAllByPhoneNumberKeyword(tsidUser, keyword, pageable);
   }
 
   @Operation(
@@ -189,11 +233,12 @@ public class ContactController {
             description = "Internal server error.",
             content = @Content)
       })
-  @GetMapping("/contacts/address={keyword}")
+  @GetMapping("/contacts/address={keyword}/page={page}/size={size}")
   public List<ContactResponseDTO> findAllByAddressKeyword(
-      @PathVariable @Size(min = 3, max = 15) String keyword, HttpSession session) {
+      @PathVariable @Size(min = 3, max = 15) String keyword, @PathVariable int page, @PathVariable int size, HttpSession session) {
     long tsidUser = (long) session.getAttribute("tsid");
-    return contactService.findAllByAddressKeyword(tsidUser, keyword);
+    Pageable pageable = PageRequest.of(page, size);
+    return contactService.findAllByAddressKeyword(tsidUser, keyword, pageable);
   }
 
   @Operation(
@@ -213,7 +258,7 @@ public class ContactController {
             description = "Internal server error.",
             content = @Content)
       })
-  @GetMapping("/contacts")
+  @GetMapping("/contacts/page={page}/size={size}")
   public List<ContactResponseDTO> findAllByUser(HttpSession session) {
     long tsidUser = (long) session.getAttribute("tsid");
     return contactService.findAllByUser(tsidUser);

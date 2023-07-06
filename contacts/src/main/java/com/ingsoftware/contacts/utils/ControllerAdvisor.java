@@ -5,6 +5,7 @@ import com.ingsoftware.contacts.exceptions.ContactTypeNotFoundException;
 import com.ingsoftware.contacts.exceptions.NoDataFoundException;
 import com.ingsoftware.contacts.exceptions.UserNotFoundException;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -65,6 +66,17 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     body.put("message", "Contact not found");
 
     return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(MessagingException.class)
+  public ResponseEntity<Object> handleMessagingException(
+          ContactNotFoundException ex, WebRequest request) {
+
+    Map<String, Object> body = new LinkedHashMap<>();
+    body.put("timestamp", LocalDateTime.now());
+    body.put("message", "There is a problem with sending email");
+
+    return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(ContactTypeNotFoundException.class)

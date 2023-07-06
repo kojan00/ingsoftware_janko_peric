@@ -50,7 +50,6 @@ public class WebSecurityConfig {
               auth.requestMatchers("/contact-types/**").hasRole("ADMIN");
               auth.anyRequest().authenticated();
             });
-    http.formLogin();
 
     return http.build();
   }

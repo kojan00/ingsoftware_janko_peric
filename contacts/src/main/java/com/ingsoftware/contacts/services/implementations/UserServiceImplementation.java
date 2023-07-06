@@ -1,5 +1,6 @@
 package com.ingsoftware.contacts.services.implementations;
 
+import com.ingsoftware.contacts.exceptions.EmailAlreadyExistsException;
 import com.ingsoftware.contacts.exceptions.UserNotFoundException;
 import com.ingsoftware.contacts.models.dtos.UserResponseDTO;
 import com.ingsoftware.contacts.models.dtos.UserRegistrationDTO;
@@ -71,6 +72,7 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
+  @Transactional
   public String verifyEmail(String email) {
     User user = userRepository.findByEmail(email);
 
@@ -83,8 +85,14 @@ public class UserServiceImplementation implements UserService {
   }
 
   @Override
+  @Transactional
   public UserResponseDTO save(UserRegistrationDTO userRegistrationDTO) {
     User user = userRegistrationMapper.toEntity(userRegistrationDTO);
+
+    User potentiallyExistingUserWithEmail = userRepository.findByEmail(userRegistrationDTO.email());
+    if (potentiallyExistingUserWithEmail != null) {
+      throw new EmailAlreadyExistsException();
+    }
 
     TSID tsid = TSID.fast();
     user.setTsid(tsid.toLong());
