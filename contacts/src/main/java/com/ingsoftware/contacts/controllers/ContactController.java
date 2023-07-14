@@ -2,7 +2,6 @@ package com.ingsoftware.contacts.controllers;
 
 import com.ingsoftware.contacts.models.dtos.ContactRequestDTO;
 import com.ingsoftware.contacts.models.dtos.ContactResponseDTO;
-import com.ingsoftware.contacts.models.entities.Contact;
 import com.ingsoftware.contacts.services.implementations.CsvService;
 import com.ingsoftware.contacts.services.interfaces.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,13 +23,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/contact-management")
 @Validated
+@CrossOrigin(origins = "http://localhost:4200/home")
 public class ContactController {
 
   private final ContactService contactService;
@@ -54,7 +53,7 @@ public class ContactController {
             content = @Content)
       })
   @GetMapping(value = "/export-contacts")
-  public ResponseEntity<Resource> exportContacts(HttpSession session) throws IOException {
+  public ResponseEntity<Resource> exportContacts(HttpSession session) {
     long tsid = (long) session.getAttribute("tsid");
     List<ContactResponseDTO> contactResponseDTOS = contactService.findAllByUser(tsid);
 
@@ -258,10 +257,9 @@ public class ContactController {
             description = "Internal server error.",
             content = @Content)
       })
-  @GetMapping("/contacts/page={page}/size={size}")
-  public List<ContactResponseDTO> findAllByUser(HttpSession session) {
-    long tsidUser = (long) session.getAttribute("tsid");
-    return contactService.findAllByUser(tsidUser);
+  @GetMapping("/contacts")
+  public List<ContactResponseDTO> findAllByUser(@RequestHeader("tsid") String tsid) {
+    return contactService.findAllByUser(Long.parseLong(tsid));
   }
 
   @Operation(
