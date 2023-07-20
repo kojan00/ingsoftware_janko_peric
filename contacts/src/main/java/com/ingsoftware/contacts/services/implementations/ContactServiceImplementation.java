@@ -95,18 +95,17 @@ public class ContactServiceImplementation implements ContactService {
 
   @Override
   @Transactional
-  public ContactResponseDTO save(ContactRequestDTO contactRequestDTO, HttpSession session) {
+  public ContactResponseDTO save(ContactRequestDTO contactRequestDTO, long tsid) {
     Contact contact = contactRequestMapper.toEntity(contactRequestDTO);
 
     // find who the logged user is and set it for new contact
-    long tsidUser = (long) session.getAttribute("tsid");
-    User user = userRepository.findByTsid(tsidUser);
+    User user = userRepository.findByTsid(tsid);
     contact.setUser(user);
 
 
     // generate tsid for contact
-    long tsid = TSID.fast().toLong();
-    contact.setTsid(tsid);
+    long tsidContact = TSID.fast().toLong();
+    contact.setTsid(tsidContact);
 
     ContactType contactType = contactTypeRepository.findByType(contactRequestDTO.contactType().getType());
     contact.setContactType(contactType);

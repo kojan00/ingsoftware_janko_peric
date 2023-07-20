@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -43,7 +42,8 @@ public class WebSecurityConfig {
                       "/swagger-ui/**",
                       "/swagger-ui.html",
                       "/auth/**",
-                      "/user-management/verify-email/**")
+                      "/user-management/verify-email/**",
+                      "contact-types/all")
                   .permitAll();
               auth.requestMatchers("/contact-management/**", "/user-management/verify-phone/**")
                   .hasRole("USER");

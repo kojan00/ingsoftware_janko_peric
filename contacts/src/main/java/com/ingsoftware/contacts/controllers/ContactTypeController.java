@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/contact-types")
 public class ContactTypeController {
@@ -39,6 +41,12 @@ public class ContactTypeController {
   @GetMapping("/{tsid}")
   public ContactTypeDTO findByTsid(@PathVariable long tsid) {
     return contactTypeService.findByTsid(tsid);
+  }
+
+
+  @GetMapping("/all")
+  public List<ContactTypeDTO> findAll() {
+    return contactTypeService.findAll();
   }
 
   @Operation(

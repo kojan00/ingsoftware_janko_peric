@@ -275,8 +275,8 @@ public class ContactController {
       })
   @PostMapping("/contacts")
   public ContactResponseDTO addContact(
-      @RequestBody ContactRequestDTO contactRequestDTO, HttpSession session) {
-    return contactService.save(contactRequestDTO, session);
+      @RequestBody ContactRequestDTO contactRequestDTO, @RequestHeader("tsid") String tsid) {
+    return contactService.save(contactRequestDTO, Long.parseLong(tsid));
   }
 
   @Operation(

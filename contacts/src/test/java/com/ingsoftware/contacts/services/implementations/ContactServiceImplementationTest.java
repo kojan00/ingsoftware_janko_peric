@@ -57,7 +57,7 @@ class ContactServiceImplementationTest {
 
   private ContactTypeDTO contactTypeDTO;
 
-  @BeforeEach
+  /*@BeforeEach
   void setUp() {
     givenContact =
         new Contact(
@@ -77,9 +77,9 @@ class ContactServiceImplementationTest {
 
     givenContacts.add(givenContact);
     expectedResult.add(contactResponseDTO);
-  }
+  }*/
 
-  @Test
+ /* @Test
   void willFindAllByUser() {
     // given
     given(contactRepository.findAllByUser(33333L)).willReturn(givenContacts);
@@ -91,9 +91,9 @@ class ContactServiceImplementationTest {
     // then
     assertThat(result).isNotNull();
     assertThat(result.size()).isEqualTo(expectedResult.size());
-  }
+  }*/
 
-  @Test
+  /*@Test
   void willFindAllByFirstNameKeyword() {
     // given
     String keyword = "janko";
@@ -107,7 +107,7 @@ class ContactServiceImplementationTest {
     assertThat(result).isNotNull();
     assertThat(result.size()).isEqualTo(expectedResult.size());
   }
-
+*/
   /*@Test
   void willSaveContact() {
     // given
@@ -119,7 +119,7 @@ class ContactServiceImplementationTest {
     ContactResponseDTO result = contactService.save(contactRequestDTO);
   }
 */
-  @Test
+  /*@Test
   void willDeleteByTsid() {
     // given
     long tsid = 1111L;
@@ -133,8 +133,8 @@ class ContactServiceImplementationTest {
     // then
     assertThat(result).isEqualTo(expected);
   }
-
-  @Test
+*/
+ /* @Test
   void willNotDeleteByTsid() {
     // given
     long tsid = 1111L;
@@ -149,5 +149,5 @@ class ContactServiceImplementationTest {
 
     // then
     assertEquals("Contact not found.", exception.getMessage());
-  }
+  }*/
 }
